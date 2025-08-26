@@ -9,7 +9,7 @@ services:
       yarn install --frozen-lockfile || yarn install
       bundle exec rake assets:precompile
     startCommand: bundle exec rails server -p $PORT -e production
-    postdeployCommand: bundle exec rails db:migrate
+    postDeployCommand: bundle exec rails db:migrate
     envVars:
       - key: RAILS_ENV
         value: production
@@ -26,7 +26,7 @@ services:
           name: dehradun-db
           property: connectionString
       - key: RAILS_MASTER_KEY
-        sync: false  # paste your config/master.key value in Render dashboard
+        sync: false
 
 databases:
   - name: dehradun-db
