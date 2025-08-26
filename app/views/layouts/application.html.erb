@@ -42,7 +42,12 @@
               <% if current_user.admin? || current_user.rto_user? %>
                 <%= link_to "All Feedback", feedbacks_path, class: "text-stone-600 hover:text-stone-900" %>
                 <%= link_to "Reports", (respond_to?(:reports_path) ? reports_path : "#"), class: "text-stone-600 hover:text-stone-900" %>
-                <%= link_to "Users", admin_users_path, class: "text-stone-600 hover:text-stone-900" if current_user.admin? %>
+
+                <% if current_user.admin? %>
+                  <%= link_to "Users", admin_users_path, class: "text-stone-600 hover:text-stone-900" %>
+                  <%= link_to "Districts", admin_districts_path, class: "text-stone-600 hover:text-stone-900" %>
+                  <%= link_to "Schools", admin_schools_path, class: "text-stone-600 hover:text-stone-900" %>
+                <% end %>
               <% end %>
             <% end %>
           </div>

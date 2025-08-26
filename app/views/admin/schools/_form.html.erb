@@ -1,0 +1,27 @@
+<%= form_with model: [:admin, @school], class: "space-y-5" do |f| %>
+  <% if @school.errors.any? %>
+    <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-900">
+      <div class="font-semibold"><%= pluralize(@school.errors.count, "error") %> prevented saving</div>
+      <ul class="list-disc list-inside text-sm">
+        <% @school.errors.full_messages.each do |m| %><li><%= m %></li><% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :name, class: "block text-sm font-medium text-stone-700" %>
+    <%= f.text_field :name, class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3", required: true %>
+  </div>
+
+  <div>
+    <%= f.label :district_id, "District", class: "block text-sm font-medium text-stone-700" %>
+    <%= f.collection_select :district_id, @districts, :id, :name,
+          { prompt: "Select District" },
+          { class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3", required: true } %>
+  </div>
+
+  <div class="pt-2 flex items-center justify-end gap-3">
+    <%= link_to "Cancel", admin_schools_path, class: "px-4 py-2 rounded-xl border border-stone-300 text-stone-700 hover:bg-stone-50" %>
+    <%= f.submit (@school.new_record? ? "Create School" : "Save Changes"), class: "px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm" %>
+  </div>
+<% end %>

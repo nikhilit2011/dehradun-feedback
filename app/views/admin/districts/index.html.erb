@@ -1,0 +1,30 @@
+<div class="max-w-5xl mx-auto p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-2xl font-semibold tracking-tight">Districts</h1>
+    <%= link_to "New District", new_admin_district_path, class: "px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm" %>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm ring-1 ring-stone-200/70 overflow-hidden">
+    <table class="min-w-full text-sm">
+      <thead class="bg-stone-100">
+        <tr>
+          <th class="px-4 py-2 text-left">Name</th>
+          <th class="px-4 py-2 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @districts.each do |d| %>
+          <tr class="border-t">
+            <td class="px-4 py-2"><%= d.name %></td>
+            <td class="px-4 py-2 text-right">
+              <%= link_to "Edit", edit_admin_district_path(d), class: "px-3 py-1 rounded border mr-2" %>
+              <%= link_to "Delete", admin_district_path(d),
+                    data: { turbo_method: :delete, turbo_confirm: "Delete this district?" },
+                    class: "px-3 py-1 rounded border text-rose-700 hover:bg-rose-50" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
