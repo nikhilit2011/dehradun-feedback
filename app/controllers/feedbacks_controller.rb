@@ -9,7 +9,11 @@ class FeedbacksController < ApplicationController
 
   # Public landing (you can keep this or redirect to dashboard)
   def index
-    @feedbacks = Feedback.order(created_at: :desc).limit(50) # keep your existing behavior
+    @feedbacks = Feedback
+                    .includes(school: :district)
+                    .order(created_at: :desc)
+                    .page(params[:page])      # ✅ Kaminari
+                    .per(20)                  # adjust page size if you like
   end
 
   # ----- Public form -----
