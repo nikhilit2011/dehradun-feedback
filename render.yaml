@@ -7,9 +7,9 @@ services:
     buildCommand: |
       bundle install
       yarn install --frozen-lockfile || yarn install
-      bundle exec rails db:migrate
       bundle exec rake assets:precompile
     startCommand: bundle exec rails server -p $PORT -e production
+    postDeployCommand: bundle exec rails db:migrate
     envVars:
       - key: RAILS_ENV
         value: production
