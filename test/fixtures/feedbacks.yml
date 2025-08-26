@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  school: one
+  parent_name: MyString
+  contact: MyString
+  comments: MyText
+  submitted_at: 2025-08-26 19:34:49
+  source_ip: MyString
+
+two:
+  school: two
+  parent_name: MyString
+  contact: MyString
+  comments: MyText
+  submitted_at: 2025-08-26 19:34:49
+  source_ip: MyString

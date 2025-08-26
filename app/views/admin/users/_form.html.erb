@@ -1,0 +1,49 @@
+<%= form_with model: [:admin, @user], class: "space-y-5" do |f| %>
+  <% if @user.errors.any? %>
+    <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-900">
+      <div class="font-semibold"><%= pluralize(@user.errors.count, "error") %> prevented saving</div>
+      <ul class="list-disc list-inside text-sm">
+        <% @user.errors.full_messages.each do |m| %>
+          <li><%= m %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :email, class: "block text-sm font-medium text-stone-700" %>
+    <%= f.email_field :email, class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div>
+      <%= f.label :password, class: "block text-sm font-medium text-stone-700" %>
+      <%= f.password_field :password, placeholder: (@user.persisted? ? "(leave blank to keep current)" : ""), class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+    </div>
+    <div>
+      <%= f.label :password_confirmation, class: "block text-sm font-medium text-stone-700" %>
+      <%= f.password_field :password_confirmation, class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div>
+      <%= f.label :role, class: "block text-sm font-medium text-stone-700" %>
+      <%= f.select :role, User.roles.keys.map { |r| [r.humanize, r] },
+            {}, class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+      <p class="text-xs text-stone-500 mt-1">Roles: public_user, rto_user, school_user, admin</p>
+    </div>
+
+    <div>
+      <%= f.label :school_id, "School (only for school_user)", class: "block text-sm font-medium text-stone-700" %>
+      <%= f.collection_select :school_id, @schools, :id, :name,
+            { include_blank: "— None —" },
+            { class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" } %>
+    </div>
+  </div>
+
+  <div class="pt-2 flex items-center justify-end gap-3">
+    <%= link_to "Cancel", admin_users_path, class: "px-4 py-2 rounded-xl border border-stone-300 text-stone-700 hover:bg-stone-50" %>
+    <%= f.submit (@user.new_record? ? "Create User" : "Save Changes"), class: "px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm" %>
+  </div>
+<% end %>

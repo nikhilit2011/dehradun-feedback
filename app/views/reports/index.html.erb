@@ -1,0 +1,60 @@
+<div class="max-w-7xl mx-auto space-y-8">
+
+  <!-- Header + Actions -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-semibold tracking-tight">Reports & Analytics</h1>
+    <%= link_to "Export CSV",
+                reports_path(format: :csv),
+                class: "inline-flex items-center gap-2 px-4 h-10 rounded-xl border border-stone-300 bg-white hover:bg-stone-50 text-sm" %>
+  </div>
+
+  <!-- Summary -->
+  <div class="bg-white rounded-2xl shadow-sm ring-1 ring-stone-200/70 p-6">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+      <div>
+        <div class="text-3xl font-bold text-indigo-700"><%= @total_feedbacks %></div>
+        <div class="text-xs text-stone-500 mt-1">Total Feedback</div>
+      </div>
+      <% @avg_ratings.each do |label, val| %>
+        <div>
+          <div class="text-3xl font-bold text-stone-800"><%= val || "—" %></div>
+          <div class="text-xs text-stone-500 mt-1"><%= label.to_s.humanize %> Avg</div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Top Issues -->
+  <div class="bg-white rounded-2xl shadow-sm ring-1 ring-stone-200/70 p-6">
+    <h2 class="text-lg font-semibold mb-3">Top Reported Issues</h2>
+    <% if @top_issues.present? %>
+      <ul class="divide-y divide-stone-200 text-sm">
+        <% @top_issues.each do |issue, count| %>
+          <li class="flex justify-between py-2">
+            <span><%= issue.to_s.humanize %></span>
+            <span class="font-medium text-stone-700"><%= count %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-stone-500 text-sm">No issues reported yet.</p>
+    <% end %>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white rounded-2xl shadow-sm ring-1 ring-stone-200/70 p-6">
+      <h3 class="text-sm font-semibold mb-2">Feedback Volume Over Time</h3>
+      <%= line_chart @feedbacks_over_time, height: "260px", library: { legend: { display: false } } %>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm ring-1 ring-stone-200/70 p-6">
+      <h3 class="text-sm font-semibold mb-2">Avg Safety by District</h3>
+      <%= column_chart @safety_by_district, height: "260px", library: { legend: { display: false } } %>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm ring-1 ring-stone-200/70 p-6">
+    <h3 class="text-sm font-semibold mb-2">Issues Frequency</h3>
+    <%= bar_chart @issues_chart, height: "280px", library: { legend: { display: false } } %>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="min-h-[70vh] grid place-items-center px-4">
+  <div class="w-full max-w-md">
+    <div class="bg-white rounded-2xl shadow-sm ring-1 ring-stone-200/70">
+      <div class="px-6 py-5 border-b border-stone-100/80 rounded-t-2xl">
+        <h1 class="text-lg font-semibold tracking-tight">Admin Login</h1>
+        <p class="text-sm text-stone-500 mt-1">Sign in to view the dashboard and reports.</p>
+      </div>
+
+      <div class="p-6">
+        <%= form_with(model: resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }, class: "space-y-5") do |f| %>
+          <div>
+            <%= f.label :email, "Email", class: "block text-sm font-medium text-stone-700" %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                  class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between">
+              <%= f.label :password, "Password", class: "block text-sm font-medium text-stone-700" %>
+              <% if devise_mapping.recoverable? %>
+                <%= link_to "Forgot password?", new_password_path(resource_name), class: "text-xs text-indigo-700 hover:underline" %>
+              <% end %>
+            </div>
+            <%= f.password_field :password, autocomplete: "current-password",
+                  class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+          </div>
+
+          <% if devise_mapping.rememberable? %>
+            <label class="inline-flex items-center gap-2 text-sm">
+              <%= f.check_box :remember_me, class: "rounded border-stone-300 text-indigo-600 focus:ring-indigo-500" %>
+              <span>Remember me</span>
+            </label>
+          <% end %>
+
+          <div class="pt-2">
+            <%= f.submit "Log in",
+                class: "w-full h-11 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 shadow-sm" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Small helper links -->
+    <div class="text-center mt-4 text-xs text-stone-500">
+      <%= link_to "Back to Home", root_path, class: "hover:underline" %>
+    </div>
+  </div>
+</div>

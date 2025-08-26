@@ -1,0 +1,137 @@
+<div class="max-w-3xl mx-auto p-6" data-controller="district">
+  <h1 class="text-2xl font-semibold tracking-tight mb-2">School Transport Feedback — Dehradun Region</h1>
+  <p class="text-sm text-stone-500 mb-6">Your feedback helps us improve safety, punctuality, and service quality.</p>
+
+  <% if @feedback.errors.any? %>
+    <div class="mb-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-900">
+      <div class="font-semibold mb-1"><%= pluralize(@feedback.errors.count, "error") %> prevented submission</div>
+      <ul class="list-disc list-inside text-sm">
+        <% @feedback.errors.full_messages.each do |m| %>
+          <li><%= m %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="bg-white rounded-2xl shadow-sm ring-1 ring-stone-200/60">
+    <div class="px-6 py-5 border-b border-stone-100/80 bg-white/70 rounded-t-2xl">
+      <h2 class="text-base font-semibold tracking-tight">Submit Feedback</h2>
+      <p class="mt-1 text-sm text-stone-500">Fields marked with <span class="text-rose-600">*</span> are required.</p>
+    </div>
+
+    <div class="p-6">
+      <%= form_with model: @feedback, class: "space-y-6" do |f| %>
+
+        <!-- District & School -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-medium text-stone-700">
+              District <span class="text-rose-600">*</span>
+            </label>
+            <%= f.collection_select :district_id, @districts, :id, :name,
+                  { prompt: "Select District" },
+                  { data: { action: "change->district#filterSchools", district_target: "districtSelect" },
+                    class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm
+                           focus:border-indigo-500 focus:ring-indigo-500 px-3",
+                    required: true } %>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-stone-700">
+              School <span class="text-rose-600">*</span>
+            </label>
+            <%= f.select :school_id, [],
+                  { prompt: "Select School" },
+                  { data: { district_target: "schoolSelect", selected: f.object&.school_id },
+                    id: "feedback_school_id",
+                    class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm
+                           focus:border-indigo-500 focus:ring-indigo-500 px-3
+                           disabled:bg-stone-100 disabled:text-stone-500",
+                    required: true,
+                    disabled: true } %>
+            <p class="mt-1 text-xs text-stone-500">Choose the student’s school within the selected district.</p>
+          </div>
+        </div>
+
+        <!-- Parent + Contact -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-medium text-stone-700">Parent/Guardian Name <span class="text-rose-600">*</span></label>
+            <%= f.text_field :parent_name, required: true,
+                  placeholder: "e.g., Ramesh Sharma",
+                  class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-stone-700">Contact (Phone/Email) <span class="text-rose-600">*</span></label>
+            <%= f.text_field :contact, required: true,
+                  pattern: "\\d{10}|[^\\s@]+@[^\\s@]+\\.[^\\s@]+",
+                  title: "Enter a 10-digit phone number or a valid email",
+                  placeholder: "10-digit phone or email",
+                  class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+            <p class="mt-1 text-xs text-stone-500">We’ll only use this if we need clarification about your feedback.</p>
+          </div>
+        </div>
+
+        <!-- Ratings -->
+        <div>
+          <label class="block text-sm font-medium text-stone-700 mb-2">Rate the following (1–5)</label>
+
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <% [
+              [:punctuality_rating, "Punctuality"],
+              [:safety_rating, "Safety"],
+              [:cleanliness_rating, "Cleanliness"],
+              [:driver_behavior_rating, "Driver Behaviour"],
+              [:seat_availability_rating, "Seat Availability"]
+            ].each do |field, label_text| %>
+              <div>
+                <div class="text-xs text-stone-500 mb-1"><%= label_text %></div>
+                <div class="flex items-center gap-1 flex-nowrap overflow-x-auto no-scrollbar pr-1">
+                  <% (1..5).each do |n| %>
+                    <label class="inline-flex">
+                      <%= f.radio_button field, n, class: "peer sr-only", required: true %>
+                      <span class="px-2.5 py-1 rounded-lg border border-stone-300 text-sm text-stone-700
+                                   peer-checked:bg-stone-900 peer-checked:text-white peer-checked:border-stone-900
+                                   hover:bg-stone-50 cursor-pointer select-none transition">
+                        <%= n %>
+                      </span>
+                    </label>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Issues -->
+        <fieldset class="rounded-2xl border border-stone-200/70 p-4">
+          <legend class="px-1 text-sm font-medium text-stone-700">Issues observed (select all that apply)</legend>
+          <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <% Feedback::ISSUES.each_key do |k| %>
+              <label class="inline-flex items-center gap-2 text-sm">
+                <%= check_box_tag 'feedback[issues][]', k, false, class: "rounded border-stone-300 text-indigo-600 focus:ring-indigo-500" %>
+                <span><%= k.to_s.humanize %></span>
+              </label>
+            <% end %>
+          </div>
+        </fieldset>
+
+        <!-- Remarks -->
+        <div>
+          <label class="block text-sm font-medium text-stone-700">Remarks / Details</label>
+          <%= f.text_area :comments, rows: 6,
+                class: "mt-1 w-full rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2",
+                placeholder: "Describe the issue (overcrowding, late arrival, rash driving, missing documents, etc.)" %>
+          <p class="text-xs text-stone-500 mt-1">Long remarks are welcome. Avoid sharing sensitive personal information.</p>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-end gap-3 pt-2">
+          <%= link_to "Cancel", feedbacks_path, class: "px-4 py-2 rounded-xl border border-stone-300 text-stone-700 hover:bg-stone-50" %>
+          <%= f.submit "Submit Feedback", class: "px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm" %>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</div>

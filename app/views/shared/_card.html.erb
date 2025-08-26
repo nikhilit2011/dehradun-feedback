@@ -1,0 +1,13 @@
+<div class="bg-white rounded-2xl shadow-sm ring-1 ring-stone-200/60">
+  <% if local_assigns[:title].present? %>
+    <div class="px-6 py-5 border-b border-stone-100">
+      <h2 class="text-base font-semibold tracking-tight"><%= title %></h2>
+      <% if local_assigns[:subtitle].present? %>
+        <p class="mt-1 text-sm text-stone-500"><%= subtitle %></p>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="p-6">
+    <%= yield %>
+  </div>
+</div>

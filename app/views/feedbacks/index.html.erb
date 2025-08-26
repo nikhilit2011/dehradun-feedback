@@ -1,0 +1,77 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-xl font-semibold tracking-tight">All Feedback</h1>
+      <p class="text-sm text-stone-500">Sorted by most recent submissions.</p>
+    </div>
+    <%= link_to "New Feedback", new_feedback_path,
+          class: "px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm text-sm" %>
+  </div>
+
+  <!-- Search -->
+  <div class="max-w-md">
+    <%= form_with url: feedbacks_path, method: :get, local: true, class: "relative" do |f| %>
+      <%= f.text_field :q, value: params[:q], placeholder: "Search parent, contact, school…",
+            class: "w-full rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 pl-10 pr-3 py-2" %>
+      <div class="pointer-events-none absolute left-3 top-2.5 text-stone-400">⌕</div>
+    <% end %>
+  </div>
+
+  <!-- Feedback Table -->
+  <div class="bg-white rounded-2xl shadow-sm ring-1 ring-stone-200/60">
+    <% if @feedbacks.blank? %>
+      <div class="text-center py-16">
+        <div class="text-4xl mb-3">🗒️</div>
+        <div class="font-medium">No feedback found</div>
+        <p class="text-sm text-stone-500 mt-1">Try adjusting your search or add a new entry.</p>
+      </div>
+    <% else %>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-stone-600 border-b border-stone-200">
+              <th class="p-3 text-left font-medium">Parent</th>
+              <th class="p-3 text-left font-medium">Contact</th>
+              <th class="p-3 text-left font-medium">School</th>
+              <th class="p-3 text-left font-medium">District</th>
+              <th class="p-3 text-left font-medium">Ratings</th>
+              <th class="p-3 text-left font-medium">Issues</th>
+              <th class="p-3 text-left font-medium">Comments</th>
+              <th class="p-3 text-left font-medium">Submitted</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @feedbacks.each do |f| %>
+              <tr class="border-b border-stone-100 hover:bg-stone-50">
+                <td class="p-3"><%= f.parent_name %></td>
+                <td class="p-3"><%= f.contact %></td>
+                <td class="p-3"><%= f.school.try(:name) %></td>
+                <td class="p-3"><%= f.school.try(:district).try(:name) %></td>
+                <td class="p-3 whitespace-nowrap">
+                  ⏰ <%= f.punctuality_rating %> /
+                  🛡️ <%= f.safety_rating %> /
+                  ✨ <%= f.cleanliness_rating %> /
+                  👨‍✈️ <%= f.driver_behavior_rating %> /
+                  🪑 <%= f.seat_availability_rating %>
+                </td>
+                <td class="p-3"><%= f.issues&.join(", ") %></td>
+                <td class="p-3 max-w-md">
+                  <div class="line-clamp-2"><%= f.comments %></div>
+                </td>
+                <td class="p-3 whitespace-nowrap"><%= l(f.created_at, format: :short) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination (optional) -->
+      <% if defined?(paginate) %>
+        <div class="mt-6 flex justify-center">
+          <%= paginate @feedbacks, theme: 'tailwind' %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
