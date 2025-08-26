@@ -10,16 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_26_183411) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_26_213216) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "districts", force: :cascade do |t|
     t.string "name"
-    t.bigint "region_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["region_id"], name: "index_districts_on_region_id"
   end
 
   create_table "feedbacks", force: :cascade do |t|
@@ -71,7 +69,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_26_183411) do
     t.index ["school_id"], name: "index_users_on_school_id"
   end
 
-  add_foreign_key "districts", "regions"
   add_foreign_key "feedbacks", "schools"
   add_foreign_key "schools", "districts"
   add_foreign_key "users", "schools"
