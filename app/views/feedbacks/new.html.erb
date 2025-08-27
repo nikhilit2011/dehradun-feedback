@@ -81,6 +81,15 @@
           <p class="text-xs text-stone-500 mt-1">If known, please enter the school bus/vehicle number.</p>
         </div>
 
+        <!-- Vehicle Category (optional) -->
+        <div>
+          <label class="block text-sm font-medium text-stone-700">Vehicle Category (optional)</label>
+          <%= f.select :vehicle_category,
+                [["School Bus", "school_bus"], ["Others", "others"]],
+                { include_blank: "Select vehicle type" },
+                class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+        </div>
+
         <!-- Ratings -->
         <div>
           <label class="block text-sm font-medium text-stone-700 mb-2">Rate the following (1–5)</label>
@@ -100,9 +109,7 @@
                       <%= f.radio_button field, n, class: "peer sr-only", required: true %>
                       <span class="px-2.5 py-1 rounded-lg border border-stone-300 text-sm text-stone-700
                                    peer-checked:bg-stone-900 peer-checked:text-white peer-checked:border-stone-900
-                                   hover:bg-stone-50 cursor-pointer select-none transition">
-                        <%= n %>
-                      </span>
+                                   hover:bg-stone-50 cursor-pointer select-none transition"><%= n %></span>
                     </label>
                   <% end %>
                 </div>
@@ -122,7 +129,20 @@
               </label>
             <% end %>
           </div>
+
+          <!-- Info line -->
+          <p class="mt-3 text-xs text-stone-500">
+            Tip: You can verify a vehicle’s registration, fitness and permit status in the mParivahan app.
+          </p>
         </fieldset>
+
+        <!-- Appreciation (optional) -->
+        <div>
+          <label class="block text-sm font-medium text-stone-700">Appreciation / Praise (optional)</label>
+          <%= f.text_area :praise_note, rows: 4,
+                placeholder: "Share positive feedback about the driver or the school’s transport team.",
+                class: "mt-1 w-full rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2" %>
+        </div>
 
         <!-- Remarks -->
         <div>
