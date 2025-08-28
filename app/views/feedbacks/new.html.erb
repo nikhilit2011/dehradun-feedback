@@ -23,16 +23,72 @@
       <%= form_with model: @feedback, class: "space-y-6" do |f| %>
 
         <!-- District & School -->
-        ... [keep your existing district & school select markup] ...
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-medium text-stone-700">
+              District <span class="text-rose-600">*</span>
+            </label>
+            <%= f.collection_select :district_id, @districts, :id, :name,
+                  { prompt: "Select District" },
+                  { data: { action: "change->district#filterSchools", district_target: "districtSelect" },
+                    class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm
+                           focus:border-indigo-500 focus:ring-indigo-500 px-3",
+                    required: true } %>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-stone-700">
+              School <span class="text-rose-600">*</span>
+            </label>
+            <%= f.select :school_id, [],
+                  { prompt: "Select School" },
+                  { data: { district_target: "schoolSelect", selected: f.object&.school_id },
+                    id: "feedback_school_id",
+                    class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm
+                           focus:border-indigo-500 focus:ring-indigo-500 px-3
+                           disabled:bg-stone-100 disabled:text-stone-500",
+                    required: true,
+                    disabled: true } %>
+            <p class="mt-1 text-xs text-stone-500">Choose the student’s school within the selected district.</p>
+          </div>
+        </div>
 
         <!-- Parent + Contact -->
-        ... [keep your parent/contact markup] ...
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-medium text-stone-700">Parent/Guardian Name <span class="text-rose-600">*</span></label>
+            <%= f.text_field :parent_name, required: true,
+                  placeholder: "e.g., Ramesh Sharma",
+                  class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-stone-700">Contact (Phone/Email) <span class="text-rose-600">*</span></label>
+            <%= f.text_field :contact, required: true,
+                  pattern: "\\d{10}|[^\\s@]+@[^\\s@]+\\.[^\\s@]+",
+                  title: "Enter a 10-digit phone number or a valid email",
+                  placeholder: "10-digit phone or email",
+                  class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+            <p class="mt-1 text-xs text-stone-500">We’ll only use this if we need clarification about your feedback.</p>
+          </div>
+        </div>
 
         <!-- Vehicle Number (optional) -->
-        ... [keep your vehicle number markup] ...
+        <div>
+          <label class="block text-sm font-medium text-stone-700">Vehicle Number (optional)</label>
+          <%= f.text_field :vehicle_number,
+                placeholder: "e.g., UK 07 AB 1234",
+                class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+          <p class="text-xs text-stone-500 mt-1">If known, please enter the school bus/vehicle number.</p>
+        </div>
 
         <!-- Vehicle Category (optional) -->
-        ... [keep your vehicle category markup] ...
+        <div>
+          <label class="block text-sm font-medium text-stone-700">Vehicle Category (optional)</label>
+          <%= f.select :vehicle_category,
+                [["School Bus", "school_bus"], ["Others", "others"]],
+                { include_blank: "Select vehicle type" },
+                class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3" %>
+        </div>
 
         <!-- Overall Rating -->
         <div>
@@ -73,13 +129,27 @@
         </fieldset>
 
         <!-- Appreciation (optional) -->
-        ... [keep praise note field] ...
+        <div>
+          <label class="block text-sm font-medium text-stone-700">Appreciation / Praise (optional)</label>
+          <%= f.text_area :praise_note, rows: 4,
+                placeholder: "Share positive feedback about the driver or the school’s transport team.",
+                class: "mt-1 w-full rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2" %>
+        </div>
 
         <!-- Remarks -->
-        ... [keep comments field] ...
+        <div>
+          <label class="block text-sm font-medium text-stone-700">Remarks / Details</label>
+          <%= f.text_area :comments, rows: 6,
+                class: "mt-1 w-full rounded-xl border-stone-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2",
+                placeholder: "Describe the issue (late arrival, rash driving, missing documents, etc.)" %>
+          <p class="text-xs text-stone-500 mt-1">Long remarks are welcome. Avoid sharing sensitive personal information.</p>
+        </div>
 
         <!-- Actions -->
-        ... [keep cancel/submit buttons] ...
+        <div class="flex items-center justify-end gap-3 pt-2">
+          <%= link_to "Cancel", feedbacks_path, class: "px-4 py-2 rounded-xl border border-stone-300 text-stone-700 hover:bg-stone-50" %>
+          <%= f.submit "Submit Feedback", class: "px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm" %>
+        </div>
 
       <% end %>
     </div>
