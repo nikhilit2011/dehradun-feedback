@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_26_213859) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_28_025120) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -29,13 +29,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_26_213859) do
     t.string "source_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "punctuality_rating"
-    t.integer "safety_rating"
-    t.integer "cleanliness_rating"
-    t.integer "driver_behavior_rating"
-    t.integer "seat_availability_rating"
     t.integer "issues_mask"
     t.string "vehicle_number"
+    t.integer "overall_rating"
+    t.string "vehicle_category"
+    t.text "praise_note"
     t.index ["school_id"], name: "index_feedbacks_on_school_id"
   end
 

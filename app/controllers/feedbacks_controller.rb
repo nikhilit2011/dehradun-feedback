@@ -101,10 +101,8 @@ class FeedbacksController < ApplicationController
 
   def feedback_params
     params.require(:feedback).permit(
-      :school_id, :parent_name, :contact,:vehicle_number,
-      :punctuality_rating, :safety_rating, :cleanliness_rating,
-      :driver_behavior_rating, :seat_availability_rating,
-      :vehicle_category, :praise_note,
+      :school_id, :parent_name, :contact, :vehicle_number,
+      :vehicle_category, :praise_note, :overall_rating,
       :comments,
       issues: []
     )
