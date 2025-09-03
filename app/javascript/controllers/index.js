@@ -9,3 +9,7 @@ application.register("district", DistrictController)
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+
+import IssuesController from "./issues_controller"
+application.register("issues", IssuesController)

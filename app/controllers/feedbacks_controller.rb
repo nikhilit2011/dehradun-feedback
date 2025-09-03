@@ -103,7 +103,7 @@ class FeedbacksController < ApplicationController
     params.require(:feedback).permit(
       :school_id, :parent_name, :contact, :vehicle_number,
       :vehicle_category, :praise_note, :overall_rating,
-      :comments,
+      :comments,:other_issue_text,:other_school_name,
       issues: []
     )
   end

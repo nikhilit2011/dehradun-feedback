@@ -48,13 +48,9 @@
                 <td class="p-3"><%= f.contact %></td>
                 <td class="p-3"><%= f.school.try(:name) %></td>
                 <td class="p-3"><%= f.school.try(:district).try(:name) %></td>
-                <td class="p-3 whitespace-nowrap">
-                  ⏰ <%= f.punctuality_rating %> /
-                  🛡️ <%= f.safety_rating %> /
-                  ✨ <%= f.cleanliness_rating %> /
-                  👨‍✈️ <%= f.driver_behavior_rating %> /
-                  🪑 <%= f.seat_availability_rating %>
-                </td>
+				<td class="p-3 whitespace-nowrap">
+				  ⭐ <%= f.overall_rating || "-" %> / 5
+				</td>
                 <td class="p-3"><%= f.issues&.join(", ") %></td>
                 <td class="p-3 max-w-md">
                   <div class="line-clamp-2"><%= f.comments %></div>
