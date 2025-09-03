@@ -1,4 +1,4 @@
-<div class="max-w-3xl mx-auto p-6" data-controller="district">
+<div class="max-w-3xl mx-auto p-6">
   <h1 class="text-2xl font-semibold tracking-tight mb-2">School Transport Feedback — Dehradun Region</h1>
   <p class="text-sm text-stone-500 mb-6">As the regulatory authority, we seek your feedback to ensure safer and more reliable school transport services.</p>
 
@@ -22,45 +22,43 @@
     <div class="p-6">
       <%= form_with model: @feedback, class: "space-y-6" do |f| %>
 
-		<!-- District & School -->
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-		  <div>
-		    <label class="block text-sm font-medium text-stone-700">
-		      District <span class="text-rose-600">*</span>
-		    </label>
-		    <%= f.collection_select :district_id, @districts, :id, :name,
-		          { prompt: "Select District" },
-		          { data: { action: "change->district#filterSchools", district_target: "districtSelect" },
-		            class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm
-		                   focus:border-indigo-500 focus:ring-indigo-500 px-3",
-		            required: true } %>
-		  </div>
+        <!-- District & School -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-sm font-medium text-stone-700">
+              District <span class="text-rose-600">*</span>
+            </label>
+            <%= f.collection_select :district_id, @districts, :id, :name,
+                  { prompt: "Select District" },
+                  { class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm
+                           focus:border-indigo-500 focus:ring-indigo-500 px-3",
+                    id: "feedback_district_id",
+                    required: true } %>
+          </div>
 
-		  <div>
-		    <label class="block text-sm font-medium text-stone-700">
-		      School <span class="text-rose-600">*</span>
-		    </label>
-		    <%= f.select :school_id, [],
-		          { prompt: "Select School" },
-		          { data: { district_target: "schoolSelect", selected: f.object&.school_id },
-		            id: "feedback_school_id",
-		            class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm
-		                   focus:border-indigo-500 focus:ring-indigo-500 px-3
-		                   disabled:bg-stone-100 disabled:text-stone-500",
-		            required: true,
-		            disabled: true } %>
-		    <p class="mt-1 text-xs text-stone-500">Choose the student’s school within the selected district, or select "Other".</p>
-		  </div>
-		</div>
+          <div>
+            <label class="block text-sm font-medium text-stone-700">
+              School <span class="text-rose-600">*</span>
+            </label>
+            <%= f.select :school_id, [],
+                  { prompt: "Select School" },
+                  { id: "feedback_school_id",
+                    class: "mt-1 w-full h-11 rounded-xl border-stone-300 shadow-sm
+                           focus:border-indigo-500 focus:ring-indigo-500 px-3
+                           disabled:bg-stone-100 disabled:text-stone-500",
+                    required: true,
+                    disabled: true } %>
+            <p class="mt-1 text-xs text-stone-500">Choose the student’s school within the selected district, or select "Other".</p>
+          </div>
+        </div>
 
-		<!-- Hidden "Other School" input -->
-		<div id="other-school-field" class="mt-3 hidden">
-		  <%= text_field_tag 'feedback[other_school_name]', nil,
-		        placeholder: "Enter School Name",
-		        class: "mt-1 w-full rounded-xl border-stone-300 shadow-sm 
-		               focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2" %>
-		</div>
-        
+        <!-- Hidden "Other School" input -->
+        <div id="other-school-field" class="mt-3 hidden">
+          <%= text_field_tag 'feedback[other_school_name]', nil,
+                placeholder: "Enter School Name",
+                class: "mt-1 w-full rounded-xl border-stone-300 shadow-sm 
+                       focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2" %>
+        </div>
 
         <!-- Parent + Contact -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -118,48 +116,28 @@
           </div>
         </div>
 
-		<!-- Issues -->
-		<fieldset class="rounded-2xl border border-stone-200/70 p-4">
-		  <legend class="px-1 text-sm font-medium text-stone-700">Issues observed (select all that apply)</legend>
-		  <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
-		    <% Feedback::ISSUES.each_key do |k| %>
-		      <label class="inline-flex items-center gap-2 text-sm">
-		        <%= check_box_tag 'feedback[issues][]', k, false,
-		              id: "issue_#{k}",
-		              class: "rounded border-stone-300 text-indigo-600 focus:ring-indigo-500" %>
-		        <span><%= k.to_s.humanize %></span>
-		      </label>
-		    <% end %>
-		  </div>
+        <!-- Issues -->
+        <fieldset class="rounded-2xl border border-stone-200/70 p-4">
+          <legend class="px-1 text-sm font-medium text-stone-700">Issues observed (select all that apply)</legend>
+          <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <% Feedback::ISSUES.each_key do |k| %>
+              <label class="inline-flex items-center gap-2 text-sm">
+                <%= check_box_tag 'feedback[issues][]', k, false,
+                      id: "issue_#{k}",
+                      class: "rounded border-stone-300 text-indigo-600 focus:ring-indigo-500" %>
+                <span><%= k.to_s.humanize %></span>
+              </label>
+            <% end %>
+          </div>
 
-		  <!-- Hidden text field for Others -->
-		  <div id="other-issue-field" class="mt-3 hidden">
-		    <%= text_field_tag 'feedback[other_issue_text]', nil,
-		          placeholder: "Please specify the issue",
-		          class: "mt-1 w-full rounded-xl border-stone-300 shadow-sm 
-		                 focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2" %>
-		  </div>
-		</fieldset>
-
-		<script>
-		  document.addEventListener("DOMContentLoaded", function() {
-		    const othersCheckbox = document.getElementById("issue_others");
-		    const otherField = document.getElementById("other-issue-field");
-
-		    if (othersCheckbox) {
-		      othersCheckbox.addEventListener("change", function() {
-		        if (this.checked) {
-		          otherField.classList.remove("hidden");
-		        } else {
-		          otherField.classList.add("hidden");
-		        }
-		      });
-		    }
-		  });
-		</script>
-		
-		
-        
+          <!-- Hidden text field for Others -->
+          <div id="other-issue-field" class="mt-3 hidden">
+            <%= text_field_tag 'feedback[other_issue_text]', nil,
+                  placeholder: "Please specify the issue",
+                  class: "mt-1 w-full rounded-xl border-stone-300 shadow-sm 
+                         focus:border-indigo-500 focus:ring-indigo-500 px-3 py-2" %>
+          </div>
+        </fieldset>
 
         <!-- Appreciation (optional) -->
         <div>
@@ -188,18 +166,58 @@
   </div>
 </div>
 
-
+<!-- JS for dynamic schools, Other school, and Other issue -->
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    const schoolSelect = document.getElementById("feedback_school_id");
+    const districtSelect = document.getElementById("feedback_district_id");
+    const schoolSelect   = document.getElementById("feedback_school_id");
     const otherSchoolField = document.getElementById("other-school-field");
+    const othersCheckbox = document.getElementById("issue_others");
+    const otherIssueField = document.getElementById("other-issue-field");
 
-    if (schoolSelect) {
+    if (districtSelect && schoolSelect) {
+      districtSelect.addEventListener("change", async function() {
+        const districtId = this.value;
+        schoolSelect.innerHTML = `<option value="">Loading…</option>`;
+        schoolSelect.disabled = true;
+        otherSchoolField.classList.add("hidden");
+
+        if (!districtId) {
+          schoolSelect.innerHTML = `<option value="">Select School</option>`;
+          return;
+        }
+
+        try {
+          const resp = await fetch(`/districts/${districtId}/schools.json`);
+          const schools = await resp.json();
+
+          let options = `<option value="">Select School</option>`;
+          schools.forEach(s => {
+            options += `<option value="${s.id}">${s.name}</option>`;
+          });
+          schoolSelect.innerHTML = options;
+          schoolSelect.disabled = false;
+        } catch (err) {
+          console.error("Error loading schools:", err);
+          schoolSelect.innerHTML = `<option value="">Unable to load schools</option>`;
+        }
+      });
+
       schoolSelect.addEventListener("change", function() {
         if (this.value === "other") {
           otherSchoolField.classList.remove("hidden");
         } else {
           otherSchoolField.classList.add("hidden");
+        }
+      });
+    }
+
+    if (othersCheckbox) {
+      othersCheckbox.addEventListener("change", function() {
+        if (this.checked) {
+          otherIssueField.classList.remove("hidden");
+        } else {
+          otherIssueField.classList.add("hidden");
         }
       });
     }

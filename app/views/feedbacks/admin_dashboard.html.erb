@@ -59,11 +59,11 @@
             <td><%= fb.school.district.name %></td>
             <td class="px-4 py-2"><%= fb.parent_name %></td>
             <td class="px-4 py-2"><%= fb.contact %></td>
-            <td class="px-4 py-2">
-              P:<%= fb.punctuality_rating %>,
-              S:<%= fb.safety_rating %>,
-              C:<%= fb.cleanliness_rating %>
-            </td>
+           
+			
+			<td class="p-3 whitespace-nowrap">
+			  ⭐ <%= fb.overall_rating || "-" %> / 5
+			</td>
             <td class="px-4 py-2"><%= fb.issues&.join(", ") %></td>
             <td class="px-4 py-2"><%= truncate(fb.comments, length: 40) %></td>
           </tr>

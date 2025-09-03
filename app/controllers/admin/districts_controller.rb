@@ -20,6 +20,17 @@ class Admin::DistrictsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
+  
+  def schools
+    district = District.find(params[:id])
+    schools = district.schools.select(:id, :name)
+
+    # Build response with "Other" at the end
+    school_list = schools.map { |s| { id: s.id, name: s.name } }
+    school_list << { id: "other", name: "Other" }
+
+    render json: school_list
+  end
 
   def edit; end
 
