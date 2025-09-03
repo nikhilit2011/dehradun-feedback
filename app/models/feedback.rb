@@ -1,12 +1,14 @@
 class Feedback < ApplicationRecord
-  belongs_to :school
-  delegate :district, to: :school
-  before_validation { self.submitted_at ||= Time.current }
+  belongs_to :school, optional: true   # allow nil if "Other" is chosen
+  delegate :district, to: :school, allow_nil: true
 
-  validates :parent_name, :contact, :school_id, presence: true
+  before_validation { self.submitted_at ||= Time.current }
 
   # ✅ Normalize vehicle number before validation
   before_validation :normalize_vehicle_number
+  before_validation :normalize_school_id
+
+  validates :parent_name, :contact, presence: true
 
   validates :vehicle_number, presence: true, format: { 
     with: /\A[A-Z]{2}\d{2}[A-Z]{2}\d{4}\z/,
@@ -14,8 +16,10 @@ class Feedback < ApplicationRecord
   }, length: { is: 10 }
 
   validates :vehicle_category, presence: true
-  
   validates :other_issue_text, presence: true, if: -> { issues.include?(:others) }
+
+  # ✅ School / Other School validation
+  validate :validate_school_or_other
 
   # Ratings
   with_options allow_nil: true do
@@ -53,5 +57,19 @@ class Feedback < ApplicationRecord
 
   def normalize_vehicle_number
     self.vehicle_number = vehicle_number.to_s.upcase.delete(" ") if vehicle_number.present?
+  end
+
+  # ✅ If school_id = "other", set it to nil (so Rails doesn’t try to save a string in integer column)
+  def normalize_school_id
+    self.school_id = nil if school_id.to_s == "other"
+  end
+
+  # ✅ Custom validation for school vs other_school_name
+  def validate_school_or_other
+    if school_id.blank? && other_school_name.blank?
+      errors.add(:school_id, "must be selected or specify 'Other' school name")
+    elsif school_id.nil? && other_school_name.blank?
+      errors.add(:other_school_name, "must be provided when selecting 'Other'")
+    end
   end
 end
