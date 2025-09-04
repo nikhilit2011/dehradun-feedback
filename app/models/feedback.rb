@@ -33,7 +33,7 @@ class Feedback < ApplicationRecord
     valid_insurance:    1 << 3,
     tax_paid:           1 << 4,
     cleanliness:        1 << 5,
-    punctuality:        1 << 6,
+    cctv:               1 << 6,
     gps_access:         1 << 7,
     valid_dl:           1 << 8,
     seat_belt:          1 << 9,

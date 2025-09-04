@@ -125,7 +125,15 @@
                 <%= check_box_tag 'feedback[issues][]', k, false,
                       id: "issue_#{k}",
                       class: "rounded border-stone-300 text-indigo-600 focus:ring-indigo-500" %>
-                <span><%= k.to_s.humanize %></span>
+                <span>
+                	
+					<% if k == :cctv %>
+					        CCTV (if school owned vehicle)
+					      <% else %>
+					        <%= k.to_s.humanize %>
+					      <% end %>
+						  
+                </span>
               </label>
             <% end %>
           </div>
